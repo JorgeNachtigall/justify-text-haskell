@@ -1,25 +1,57 @@
 texto = "RUBIÃO fitava a enseada -- eram oito horas da manhã.\nQuem o visse com os polegares metidos no cordão do chambre à janela de uma\ngrande casa de Botafogo cuidaria que ele admirava aquele pedaço de água\nquieta mas em verdade vos digo que pensava em outra coisa.\nCotejava o passado com o presente. Que era há um ano?\nProfessor. Que é agora? Capitalista! Olha para si para as chinelas\n(umas chinelas de Túnis que lhe deu recente amigo Cristiano Palha) para a casa\npara o jardim para a enseada para os morros e para o céu e tudo desde as chinelas\naté o céu tudo entra na mesma sensação de propriedade.\n"
 
---firstLine :: String -> [String]
---firstLine [] = []
---firstLine [a] = [a]
---firstLine (a:b:x)
---   | a /= '\n' = a ++ firstLine (b:x)
---   | otherwise = 
+-- Returns a list where each element is a line from the text
 
-separaLinhas :: String -> [String]
-separaLinhas [] = []
-separaLinhas a = [(takeWhile(/= '\n') a)] ++ separaLinhas (drop 1 (dropWhile(> '\n') a))
+splitLines :: String -> [String]
+splitLines [] = []
+splitLines a = [(takeWhile(/= '\n') a)] ++ splitLines (drop 1 (dropWhile(> '\n') a))
 
-tamanhoMaiorLinha :: [Int] -> Int
-tamanhoMaiorLinha [] = 0
-tamanhoMaiorLinha (a:x) = 10
+-- Returns the size of the longest line
 
-listaTamanhoLinhas :: [String] -> [Int]
-listaTamanhoLinhas [] = []
-listaTamanhoLinhas (a:x) = tamanhoLinha a : listaTamanhoLinhas x
+sizeLongestLine :: [Int] -> Int
+sizeLongestLine l = let l2 = iSort l
+                    in lastElement l2
 
-tamanhoLinha :: String -> Int
-tamanhoLinha [] = 0
-tamanhoLinha (a:x) = 1 + tamanhoLinha x
+-- Returns a list where each element is the size of an line
 
+lineSizeList :: [String] -> [Int]
+lineSizeList [] = []
+lineSizeList (a:x) = lineSize a : lineSizeList x
+
+-- Returns the size of an line
+
+lineSize :: String -> Int
+lineSize [] = 0
+lineSize (a:x) = 1 + lineSize x
+
+-- Split the list of lines in a list of words
+
+listOfWords :: [String] -> [[String]]
+listOfWords [] = []
+-- TODO: listOfWords (a:x) = [[takeWhile(/= ' ') a]] : [[listOfWords (dro)]]
+
+
+-- Returns the number of blank spaces needed to be added in a line
+
+blankSpaceNeeded :: String -> Int -> Int
+blankSpaceNeeded s n = n - lineSize s
+
+-- List sorting functions
+
+insert :: Int -> [Int] -> [Int]
+insert a [] = [a]
+insert a (b:x)
+   | a <= b = a:(b:x)
+   | otherwise = b : insert a x
+
+iSort :: [Int] -> [Int]
+iSort [] = []
+iSort (a:x) = insert a (iSort x)
+
+lastElement :: [Int] -> Int
+lastElement [a] = a
+lastElement (a:x) = lastElement x
+
+-------------------------------
+
+longestLineSize = sizeLongestLine (lineSizeList (splitLines texto))
