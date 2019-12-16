@@ -1,6 +1,6 @@
 # justify-text-haskell
 
-An Haskell implementation of the Justify Text Function for the Function Programming discipline.
+An Haskell implementation of the Justify Text Function for the Functional Programming discipline.
 
 Input:
 
